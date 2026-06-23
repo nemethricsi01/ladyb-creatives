@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const raw  = import.meta.env.BASE_URL;
+const base = raw.endsWith('/') ? raw : raw + '/';
+
+const projects = [
+  // Branding & Identity
+  { id: 1, title: 'Horizon Studio', category: 'branding', label: 'Branding & Identity', year: '2024', bg: '#7AAFCB', s1: '#F0EDE8', s2: '#2B4B3F' },
+  { id: 2, title: 'Éden Apothecary', category: 'branding', label: 'Branding & Identity', year: '2024', bg: '#4A7D9A', s1: '#C4A882', s2: '#F0EDE8' },
+  { id: 3, title: 'Forma Studio', category: 'branding', label: 'Branding & Identity', year: '2023', bg: '#2B4B3F', s1: '#7AAFCB', s2: '#C4A882' },
+
+  // Illustration
+  { id: 4, title: 'Reverie', category: 'illustration', label: 'Illustration', year: '2024', bg: '#6B5B45', s1: '#C4A882', s2: '#7AAFCB' },
+  { id: 5, title: 'The Floating Hour', category: 'illustration', label: 'Illustration', year: '2023', bg: '#3D3531', s1: '#C94030', s2: '#C4A882' },
+  { id: 6, title: 'Botanical Dreams', category: 'illustration', label: 'Illustration', year: '2023', bg: '#2B4B3F', s1: '#A8CEDD', s2: '#F0EDE8' },
+
+  // Print & Editorial
+  { id: 7, title: 'Almanach', category: 'print', label: 'Print & Editorial', year: '2023', bg: '#C4A882', s1: '#1C1C1C', s2: '#C94030' },
+  { id: 8, title: 'Forma Journal', category: 'print', label: 'Print & Editorial', year: '2022', bg: '#1C1C1C', s1: '#F0EDE8', s2: '#7AAFCB' },
+  { id: 9, title: 'Érzékek', category: 'print', label: 'Print & Editorial', year: '2022', bg: '#C94030', s1: '#F0EDE8', s2: '#1C1C1C' },
+];
+---
+
+<BaseLayout title="Work" description="Portfolio of Turcsik Bella — graphic design projects in visual identity, illustration, and print design.">
+
+  <div class="page-wrap">
+
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="container">
+        <span class="label">Portfolio</span>
+        <h1 class="page-title">Work</h1>
+        <p class="page-desc">Selected projects in visual identity, illustration, and editorial design.</p>
+      </div>
+    </header>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <div class="container filter-inner">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="branding">Branding & Identity</button>
+        <button class="filter-btn" data-filter="illustration">Illustration</button>
+        <button class="filter-btn" data-filter="print">Print & Editorial</button>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <section class="portfolio-section">
+      <div class="container">
+        <div class="portfolio-grid" id="portfolio-grid">
+          {projects.map((p) => (
+            <article
+              class="project-card"
+              data-category={p.category}
+              style={`--card-bg:${p.bg};--card-s1:${p.s1};--card-s2:${p.s2};`}
+            >
+              <div class="card-img">
+                <div class="geo-s1"></div>
+                <div class="geo-s2"></div>
+                <div class="card-overlay">
+                  <span class="overlay-text">View Project</span>
+                </div>
+              </div>
+              <div class="card-info">
+                <span class="label">{p.label}</span>
+                <h2 class="card-name">{p.title}</h2>
+                <span class="card-yr">{p.year}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <p class="no-results" id="no-results" aria-live="polite" hidden>
+          No projects in this category yet.
+        </p>
+      </div>
+    </section>
+
+  </div>
+
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards   = document.querySelectorAll<HTMLElement>('.project-card');
+  const noRes   = document.getElementById('no-results') as HTMLParagraphElement;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter ?? 'all';
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const match = filter === 'all' || card.dataset.category === filter;
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+
+      noRes.hidden = visible > 0;
+    });
+  });
+</script>
+
+<style>
+  .page-wrap { padding-top: var(--nav-height); }
+
+  /* ─── Page Header ──────────────────────────────────────────── */
+  .page-header {
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-header .label { margin-bottom: 1rem; }
+
+  .page-title {
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .page-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+    max-width: 50ch;
+  }
+
+  /* ─── Filter Bar ───────────────────────────────────────────── */
+  .filter-bar {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: var(--nav-height);
+    background: rgba(240, 237, 232, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+  }
+
+  .filter-inner {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-inner::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    flex-shrink: 0;
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 1.25rem 1.75rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover  { color: var(--text); }
+  .filter-btn.active { color: var(--sky-dark); border-bottom-color: var(--sky-dark); }
+
+  /* ─── Portfolio Grid ───────────────────────────────────────── */
+  .portfolio-section { padding: 4rem 0 7rem; }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .project-card { cursor: pointer; }
+
+  .card-img {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--card-bg);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .project-card:hover .card-img { transform: translateY(-6px); }
+
+  /* Placeholder geometry */
+  .geo-s1 {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    width: 60%;
+    height: 60%;
+    background: var(--card-s1);
+    opacity: 0.55;
+    transform-origin: bottom right;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .geo-s2 {
+    position: absolute;
+    inset-block-start: 18%;
+    inset-inline-start: 12%;
+    width: 38%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--card-s2);
+    opacity: 0.75;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .project-card:hover .geo-s1 { transform: scale(1.06); }
+  .project-card:hover .geo-s2 { transform: scale(0.92) translateY(4px); }
+
+  /* Hover overlay */
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 28, 28, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.35s var(--ease);
+  }
+
+  .project-card:hover .card-overlay { background: rgba(28, 28, 28, 0.25); }
+
+  .overlay-text {
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+
+  .project-card:hover .overlay-text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card-info { padding: 0 0.25rem; }
+
+  .card-info .label { margin-bottom: 0.4rem; }
+
+  .card-name {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+    transition: color 0.2s;
+  }
+  .project-card:hover .card-name { color: var(--sky-dark); }
+
+  .card-yr {
+    font-family: var(--font-sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+  }
+
+  .no-results {
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    padding: 4rem 0;
+  }
+
+  /* ─── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 960px)  { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .portfolio-grid { grid-template-columns: 1fr; } }
+</style>

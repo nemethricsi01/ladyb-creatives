@@ -1,0 +1,183 @@
+---
+const raw  = import.meta.env.BASE_URL;
+const base = raw.endsWith('/') ? raw : raw + '/';
+const path = Astro.url.pathname;
+
+function isActive(segment: string) {
+  return path.includes(segment);
+}
+---
+
+<header class="header">
+  <div class="header-inner">
+    <a href={base} class="logo" aria-label="Ladyb Creatives — home">
+      <span class="logo-mark">LB</span>
+      <span class="logo-text">Ladyb Creatives</span>
+    </a>
+
+    <nav class="nav" aria-label="Main navigation">
+      <a href={`${base}portfolio`} class:list={['nav-link', { active: isActive('portfolio') }]}>Work</a>
+      <a href={`${base}about`}     class:list={['nav-link', { active: isActive('about') }]}>About</a>
+      <a href={`${base}services`}  class:list={['nav-link', { active: isActive('services') }]}>Services</a>
+      <a href={`${base}contact`}   class:list={['nav-link', 'nav-cta', { active: isActive('contact') }]}>Contact</a>
+    </nav>
+
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle') as HTMLButtonElement;
+  const nav    = document.querySelector('.nav') as HTMLElement;
+
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    nav.classList.toggle('nav-open', !open);
+  });
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 100;
+    background: rgba(240, 237, 232, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Logo */
+  .logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--sky-dark);
+    line-height: 1;
+  }
+
+  .logo-text {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Nav */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-muted);
+    position: relative;
+    padding-bottom: 3px;
+    transition: color 0.2s;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    width: 0;
+    height: 1px;
+    background: var(--sky-dark);
+    transition: width 0.25s var(--ease);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--text);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  .nav-cta {
+    padding: 0.55rem 1.2rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .nav-cta::after { display: none; }
+  .nav-cta:hover  { border-color: var(--sky-dark); color: var(--sky-dark); }
+  .nav-cta.active { border-color: var(--sky-dark); color: var(--sky-dark); }
+
+  /* Hamburger (mobile) */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--text);
+    transition: transform 0.2s;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle { display: flex; }
+
+    .nav {
+      display: none;
+      position: absolute;
+      inset-block-start: var(--nav-height);
+      inset-inline: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+    }
+    .nav.nav-open { display: flex; }
+
+    .nav-link {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      width: 100%;
+    }
+    .nav-cta { border: none; padding: 0.75rem 0; }
+  }
+</style>

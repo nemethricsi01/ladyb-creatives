@@ -1,0 +1,162 @@
+/* ─── Design Tokens ─────────────────────────────────────────────────────── */
+:root {
+  /* Palette — Magritte-surreal with Bauhaus structure */
+  --bg:          #F0EDE8;
+  --bg-alt:      #E5E0D8;
+  --bg-dark:     #1C1C1C;
+  --sky:         #7AAFCB;
+  --sky-light:   #A8CEDD;
+  --sky-dark:    #4A7D9A;
+  --earth:       #C4A882;
+  --earth-dark:  #9C7E5E;
+  --forest:      #2B4B3F;
+  --cloud:       #F7F5F0;
+  --red:         #C94030;
+  --text:        #1C1C1C;
+  --text-muted:  #6B6460;
+  --text-light:  #9B958F;
+  --border:      #D5CFC7;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'Josefin Sans', 'Helvetica Neue', sans-serif;
+  --font-body:  'DM Sans', system-ui, sans-serif;
+
+  /* Layout */
+  --nav-height: 80px;
+  --max-width:  1200px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+em { font-style: italic; }
+
+.label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ─── Layout Utilities ───────────────────────────────────────────────────── */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+.section {
+  padding: 7rem 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.9rem 2rem;
+  border: 1px solid;
+  transition: background 0.25s var(--ease), border-color 0.25s var(--ease), color 0.25s var(--ease);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-primary {
+  background: var(--sky-dark);
+  border-color: var(--sky-dark);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--forest);
+  border-color: var(--forest);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+.btn-ghost:hover {
+  border-color: var(--sky-dark);
+  color: var(--sky-dark);
+}
+
+.btn-dark {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.btn-dark:hover {
+  background: var(--forest);
+  border-color: var(--forest);
+}
+
+/* ─── Link Arrow ─────────────────────────────────────────────────────────── */
+.link-arrow {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+.link-arrow:hover { color: var(--sky-dark); }
+
+/* ─── Horizontal Rule ────────────────────────────────────────────────────── */
+.hr-bauhaus {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 3px;
+  width: 100%;
+}
+.hr-bauhaus::before { content: ''; flex: 3; height: 3px; background: var(--sky); }
+.hr-bauhaus::after  { content: ''; flex: 1; height: 3px; background: var(--earth); }
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container { padding: 0 1.5rem; }
+  .section   { padding: 5rem 0; }
+}

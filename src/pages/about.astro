@@ -1,0 +1,388 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const raw  = import.meta.env.BASE_URL;
+const base = raw.endsWith('/') ? raw : raw + '/';
+
+const influences = [
+  {
+    name: 'René Magritte',
+    role: 'The art of the impossible ordinary',
+    text: 'His work taught me that the most unsettling — and beautiful — images are those that place familiar objects in unfamiliar relationships. Precision as a tool for poetry.',
+  },
+  {
+    name: 'Gustav Klimt',
+    role: 'Pattern as emotion',
+    text: 'The way he dissolves the boundary between ornament and figure, between background and subject. Decoration is never superficial — it is meaning made visible.',
+  },
+  {
+    name: 'Bauhaus',
+    role: 'Form follows function, and beauty follows both',
+    text: 'A reminder that constraint is generative. The grid is not a cage — it is a scaffold for clarity. Typography, colour, and geometry are a complete visual language.',
+  },
+  {
+    name: 'Colour Theory',
+    role: 'The physics of feeling',
+    text: 'Colour is never neutral. Itten, Albers, Munsell — the study of how colours act on each other and on the eye. Palette is the first decision and the most consequential.',
+  },
+];
+---
+
+<BaseLayout title="About" description="About Turcsik Bella — Budapest-based graphic designer, her background, philosophy, and influences.">
+
+  <div class="page-wrap">
+
+    <!-- Hero -->
+    <section class="about-hero">
+      <div class="container ah-inner">
+        <div class="ah-text">
+          <span class="label">About</span>
+          <h1 class="ah-title">Turcsik<br /><em>Bella</em></h1>
+          <p class="ah-role">Graphic Designer — Budapest</p>
+        </div>
+        <div class="ah-visual" aria-hidden="true">
+          <div class="photo-frame">
+            <div class="pf-sky"></div>
+            <div class="pf-horizon"></div>
+            <div class="pf-circle"></div>
+            <div class="pf-label">
+              <span class="label" style="color:rgba(255,255,255,0.6);">Photo coming soon</span>
+            </div>
+          </div>
+          <div class="pf-accent"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bio -->
+    <section class="section bio-section">
+      <div class="container bio-inner">
+        <div class="bio-aside">
+          <div class="bio-geo" aria-hidden="true">
+            <div class="bg-rect"></div>
+            <div class="bg-circle"></div>
+          </div>
+        </div>
+        <div class="bio-body">
+          <span class="label" style="margin-bottom:1.5rem">Background</span>
+          <p class="bio-lead">
+            Bella studied graphic design in Budapest, where she developed a practice that draws equally from European modernism and contemporary visual culture.
+          </p>
+          <p>
+            Her work encompasses brand identity systems for cultural institutions and independent businesses, conceptual illustration, and typographic editorial design. She believes that the best visual communication is precise enough to be clear, and open enough to be felt.
+          </p>
+          <p>
+            When not designing, she is studying colour relationships, reading about the history of the poster, and walking around the city with her camera.
+          </p>
+
+          <div class="bio-details">
+            <div class="bd-item">
+              <span class="label">Based in</span>
+              <p>Budapest, Hungary</p>
+            </div>
+            <div class="bd-item">
+              <span class="label">Available for</span>
+              <p>Freelance & collaboration</p>
+            </div>
+            <div class="bd-item">
+              <span class="label">Education</span>
+              <p>Graphic Design, Budapest</p>
+            </div>
+          </div>
+
+          <a href={`${base}contact`} class="btn btn-primary" style="margin-top:2.5rem">Work Together</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Influences -->
+    <section class="section influences-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="label">Influences</span>
+        </div>
+        <div class="influences-grid">
+          {influences.map((item, i) => (
+            <div class="influence-card">
+              <div class="ic-number" aria-hidden="true">0{i + 1}</div>
+              <div class="ic-body">
+                <h3 class="ic-name">{item.name}</h3>
+                <p class="ic-role label" style="margin-bottom:0.75rem;display:block">{item.role}</p>
+                <p class="ic-text">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="section process-section">
+      <div class="container">
+        <span class="label" style="margin-bottom:3rem;display:block">How I Work</span>
+        <div class="process-steps">
+          {[
+            ['01', 'Research & Discovery', 'Understanding the context: what the project is for, who it is for, and what it needs to say. Good design begins with good questions.'],
+            ['02', 'Concept & Exploration', 'Sketching, colour exploration, typographic experiments. Finding the idea before executing it. The unexpected path is usually the right one.'],
+            ['03', 'Refinement', 'Narrowing from many to one. Adjusting until the solution feels inevitable — not clever, not decorative, but exactly right.'],
+            ['04', 'Delivery', 'Prepared files, brand guidelines, or print-ready artwork. Clear documentation so the work continues to function beyond our collaboration.'],
+          ].map(([num, title, desc]) => (
+            <div class="process-step">
+              <span class="ps-num" aria-hidden="true">{num}</span>
+              <div class="ps-body">
+                <h3 class="ps-title">{title}</h3>
+                <p class="ps-desc">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .page-wrap { padding-top: var(--nav-height); }
+
+  /* ─── Hero ───────────────────────────────────────────────── */
+  .about-hero {
+    padding: 5rem 0 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ah-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: flex-end;
+  }
+
+  .ah-text .label { margin-bottom: 1.5rem; }
+
+  .ah-title {
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+  }
+  .ah-title em { color: var(--sky-dark); }
+
+  .ah-role {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-bottom: 3rem;
+  }
+
+  /* Photo frame — Magritte window motif */
+  .ah-visual { position: relative; }
+
+  .photo-frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--sky-dark);
+  }
+
+  .pf-sky {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #B8D8E8 0%, #7AAFCB 55%, #4A7D9A 100%);
+  }
+
+  .pf-horizon {
+    position: absolute;
+    inset-block-end: 32%;
+    inset-inline: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .pf-circle {
+    position: absolute;
+    inset-block-end: -5%;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    width: 55%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--earth);
+    opacity: 0.9;
+  }
+
+  .pf-label {
+    position: absolute;
+    inset-block-end: 1.5rem;
+    inset-inline: 0;
+    text-align: center;
+  }
+
+  .pf-accent {
+    position: absolute;
+    inset-block-start: 2rem;
+    inset-inline-end: -1.5rem;
+    width: 3rem;
+    height: 60%;
+    background: var(--earth);
+    z-index: -1;
+  }
+
+  /* ─── Bio ────────────────────────────────────────────────── */
+  .bio-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: flex-start;
+  }
+
+  .bio-geo { position: relative; aspect-ratio: 1; }
+
+  .bg-rect {
+    position: absolute;
+    inset: 0;
+    background: var(--sky);
+    opacity: 0.15;
+  }
+
+  .bg-circle {
+    position: absolute;
+    inset-block-end: -10%;
+    inset-inline-end: -10%;
+    width: 65%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1.5px solid var(--earth);
+  }
+
+  .bio-body p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 55ch;
+    font-weight: 300;
+    margin-bottom: 1.25rem;
+  }
+
+  .bio-lead {
+    font-family: var(--font-serif);
+    font-size: 1.35rem !important;
+    font-weight: 300;
+    color: var(--text) !important;
+    line-height: 1.5;
+  }
+
+  .bio-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .bd-item .label { margin-bottom: 0.4rem; }
+
+  .bd-item p {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--text);
+    font-weight: 400;
+    margin-bottom: 0 !important;
+  }
+
+  /* ─── Influences ─────────────────────────────────────────── */
+  .influences-section { background: var(--bg-alt); }
+
+  .influences-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+
+  .influence-card {
+    display: flex;
+    gap: 2rem;
+    padding: 3rem;
+    border: 1px solid var(--border);
+    margin: -1px 0 0 -1px;
+    transition: background 0.25s;
+  }
+  .influence-card:hover { background: var(--cloud); }
+
+  .ic-number {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 3rem;
+    letter-spacing: -0.02em;
+  }
+
+  .ic-name {
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  .ic-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  /* ─── Process ────────────────────────────────────────────── */
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .process-step {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 3rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .ps-num {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--sky);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .ps-title {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  .ps-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 55ch;
+    line-height: 1.65;
+  }
+
+  /* ─── Responsive ─────────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .ah-inner    { grid-template-columns: 1fr; }
+    .bio-inner   { grid-template-columns: 1fr; }
+    .bio-geo     { display: none; }
+    .bio-details { grid-template-columns: 1fr; gap: 1.5rem; }
+    .influences-grid { grid-template-columns: 1fr; }
+    .influence-card  { padding: 2rem 1.5rem; }
+    .process-step    { grid-template-columns: 4rem 1fr; gap: 1.5rem; }
+  }
+</style>

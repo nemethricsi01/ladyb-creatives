@@ -1,0 +1,544 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const raw  = import.meta.env.BASE_URL;
+const base = raw.endsWith('/') ? raw : raw + '/';
+
+const featuredWork = [
+  {
+    title: 'Horizon Studio',
+    category: 'Branding & Identity',
+    year: '2024',
+    bg: '#7AAFCB',
+    shape1: '#F0EDE8',
+    shape2: '#2B4B3F',
+  },
+  {
+    title: 'Reverie',
+    category: 'Illustration',
+    year: '2024',
+    bg: '#2B4B3F',
+    shape1: '#C4A882',
+    shape2: '#7AAFCB',
+  },
+  {
+    title: 'Almanach',
+    category: 'Print & Editorial',
+    year: '2023',
+    bg: '#C4A882',
+    shape1: '#1C1C1C',
+    shape2: '#C94030',
+  },
+];
+---
+
+<BaseLayout title="Home">
+
+  <!-- ── Hero ──────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="label hero-label">Graphic Designer · Budapest</span>
+        <h1 class="hero-name">
+          <span class="name-top">Turcsik</span>
+          <span class="name-bottom">Bella</span>
+        </h1>
+        <p class="hero-tagline">
+          Visual identity, illustration, and print design rooted
+          in the language of form and colour.
+        </p>
+        <div class="hero-actions">
+          <a href={`${base}portfolio`} class="btn btn-primary">View Work</a>
+          <a href={`${base}about`} class="btn btn-ghost">About Me</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hv-rect"></div>
+        <div class="hv-circle"></div>
+        <div class="hv-bar"></div>
+        <div class="hv-dot"></div>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="label" style="writing-mode:vertical-rl;letter-spacing:0.2em;">Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── Selected Work ─────────────────────────────────────────────── -->
+  <section class="section section-work">
+    <div class="container">
+      <div class="section-header">
+        <span class="label">Selected Work</span>
+        <a href={`${base}portfolio`} class="link-arrow">All Projects →</a>
+      </div>
+
+      <div class="featured-grid">
+        {featuredWork.map((item) => (
+          <a
+            href={`${base}portfolio`}
+            class="feat-card"
+            style={`--card-bg:${item.bg};--card-s1:${item.shape1};--card-s2:${item.shape2};`}
+          >
+            <div class="card-visual">
+              <div class="cv-shape cv-shape-1"></div>
+              <div class="cv-shape cv-shape-2"></div>
+            </div>
+            <div class="card-meta">
+              <span class="label card-cat">{item.category}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <span class="card-year">{item.year}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── About Teaser ──────────────────────────────────────────────── -->
+  <section class="section section-about">
+    <div class="container about-split">
+      <div class="about-visual" aria-hidden="true">
+        <div class="av-frame">
+          <div class="av-sky"></div>
+          <div class="av-circle"></div>
+          <div class="av-line"></div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <span class="label">About</span>
+        <h2 class="about-heading">
+          Design is a <em>conversation</em><br />between form,<br />colour, and meaning.
+        </h2>
+        <p>
+          Turcsik Bella is a Budapest-based graphic designer working at the
+          intersection of visual identity and conceptual illustration. Drawn to
+          the surreal clarity of Magritte and the disciplined beauty of the
+          Bauhaus, her work finds poetry in structure.
+        </p>
+        <a href={`${base}about`} class="btn btn-ghost" style="margin-top:2rem">Read More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services Teaser ───────────────────────────────────────────── -->
+  <section class="section section-services">
+    <div class="container">
+      <div class="section-header">
+        <span class="label">What I Do</span>
+        <a href={`${base}services`} class="link-arrow">All Services →</a>
+      </div>
+      <div class="services-row">
+        <div class="svc-item">
+          <div class="svc-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="14" y1="24" x2="34" y2="24" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="24" y1="14" x2="24" y2="34" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3>Visual Identity</h3>
+          <p>Brand systems that speak with coherence and quiet confidence.</p>
+        </div>
+        <div class="svc-item">
+          <div class="svc-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="6" width="36" height="36" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="24" cy="24" r="10" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3>Illustration</h3>
+          <p>Original images that inhabit the space between thought and vision.</p>
+        </div>
+        <div class="svc-item">
+          <div class="svc-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="4" width="32" height="40" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="15" y1="16" x2="33" y2="16" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="15" y1="23" x2="33" y2="23" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="15" y1="30" x2="25" y2="30" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3>Print & Editorial</h3>
+          <p>Posters, books, and publications designed for the page.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact CTA ───────────────────────────────────────────────── -->
+  <section class="section section-cta">
+    <div class="container">
+      <div class="cta-inner">
+        <span class="label">Let's Talk</span>
+        <h2 class="cta-heading">Have a project in mind?</h2>
+        <a href="mailto:bella@ladybcreatives.com" class="cta-email">
+          bella@ladybcreatives.com
+        </a>
+        <a href={`${base}contact`} class="btn btn-dark">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* ─── Hero ───────────────────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    padding-top: var(--nav-height);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4rem 2.5rem;
+    width: 100%;
+    gap: 4rem;
+  }
+
+  .hero-label { margin-bottom: 1.5rem; }
+
+  .hero-name {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    line-height: 0.9;
+    margin-bottom: 2rem;
+  }
+
+  .name-top {
+    display: block;
+    font-size: clamp(4rem, 8vw, 7.5rem);
+    color: var(--text-muted);
+    letter-spacing: -0.02em;
+  }
+
+  .name-bottom {
+    display: block;
+    font-size: clamp(5rem, 10vw, 9.5rem);
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-left: -0.04em;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 34ch;
+    line-height: 1.65;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* Hero geometric composition */
+  .hero-visual {
+    position: relative;
+    height: 60vh;
+    min-height: 420px;
+  }
+
+  .hv-rect {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    width: 78%;
+    height: 82%;
+    background: var(--sky);
+  }
+
+  .hv-circle {
+    position: absolute;
+    inset-block-end: 4%;
+    inset-inline-start: 0;
+    width: 42%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--earth);
+  }
+
+  .hv-bar {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--forest);
+  }
+
+  .hv-dot {
+    position: absolute;
+    inset-block-start: 10%;
+    inset-inline-start: 12%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  /* Scroll indicator */
+  .hero-scroll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 2rem;
+    align-self: flex-end;
+    margin: 0 auto;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50%       { opacity: 1;   transform: scaleY(1.2); }
+  }
+
+  /* ─── Featured Work ──────────────────────────────────────────────── */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feat-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .card-visual {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--card-bg);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .feat-card:hover .card-visual { transform: translateY(-4px); }
+
+  .cv-shape {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .cv-shape-1 {
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    width: 55%;
+    height: 55%;
+    background: var(--card-s1);
+    opacity: 0.6;
+  }
+
+  .cv-shape-2 {
+    inset-block-start: 20%;
+    inset-inline-start: 15%;
+    width: 35%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--card-s2);
+    opacity: 0.8;
+  }
+
+  .card-meta { padding: 0 0.25rem; }
+
+  .card-cat {
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .card-title {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+    transition: color 0.2s;
+  }
+  .feat-card:hover .card-title { color: var(--sky-dark); }
+
+  .card-year {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+  }
+
+  /* ─── About Teaser ───────────────────────────────────────────────── */
+  .section-about { background: var(--bg-alt); }
+
+  .about-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  /* Magritte-inspired frame within a frame */
+  .about-visual { position: relative; }
+
+  .av-frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    background: var(--sky);
+    overflow: hidden;
+  }
+
+  .av-sky {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--sky-light) 0%,
+      var(--sky) 50%,
+      var(--sky-dark) 100%
+    );
+  }
+
+  .av-circle {
+    position: absolute;
+    inset-block-end: -10%;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--earth);
+  }
+
+  .av-line {
+    position: absolute;
+    inset-block-start: 38%;
+    inset-inline: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .about-text .label { margin-bottom: 1.5rem; }
+
+  .about-heading {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+
+  .about-heading em {
+    font-style: italic;
+    color: var(--sky-dark);
+  }
+
+  .about-text p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 42ch;
+  }
+
+  /* ─── Services ───────────────────────────────────────────────────── */
+  .services-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .svc-item { padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+  .svc-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--sky-dark);
+    margin-bottom: 1.25rem;
+  }
+
+  .svc-item h3 {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 0.6rem;
+  }
+
+  .svc-item p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* ─── CTA ────────────────────────────────────────────────────────── */
+  .section-cta { background: var(--forest); color: var(--cloud); }
+  .section-cta .label { color: var(--sky-light); margin-bottom: 1rem; }
+
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .cta-heading {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--cloud);
+  }
+
+  .cta-email {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    color: var(--sky-light);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .cta-email:hover { color: var(--earth); }
+
+  .section-cta .btn-dark {
+    background: var(--sky-dark);
+    border-color: var(--sky-dark);
+    color: #fff;
+  }
+  .section-cta .btn-dark:hover {
+    background: var(--earth-dark);
+    border-color: var(--earth-dark);
+  }
+
+  /* ─── Responsive ─────────────────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-visual { height: 40vw; min-height: 280px; }
+    .featured-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .about-split { grid-template-columns: 1fr; }
+    .av-frame { aspect-ratio: 16 / 9; }
+    .services-row { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  @media (max-width: 768px) {
+    .hero-inner { padding: 3rem 1.5rem; }
+    .featured-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  }
+</style>

@@ -1,0 +1,325 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const raw  = import.meta.env.BASE_URL;
+const base = raw.endsWith('/') ? raw : raw + '/';
+
+const services = [
+  {
+    num: '01',
+    title: 'Visual Identity',
+    slug: 'identity',
+    color: 'var(--sky)',
+    colorDark: 'var(--sky-dark)',
+    desc: 'A complete brand system — not just a logo, but a visual language that works coherently across every context. From initial concept to final brand guidelines.',
+    includes: [
+      'Logo design & variations',
+      'Colour palette & typography',
+      'Brand guidelines document',
+      'Stationery & business collateral',
+      'Social media templates',
+    ],
+  },
+  {
+    num: '02',
+    title: 'Illustration',
+    slug: 'illustration',
+    color: 'var(--earth)',
+    colorDark: 'var(--earth-dark)',
+    desc: 'Original illustration for editorial, publishing, advertising, and cultural projects. Images that hold a distinct point of view and reward close attention.',
+    includes: [
+      'Editorial illustration',
+      'Book & cover illustration',
+      'Conceptual & campaign imagery',
+      'Custom patterns & textures',
+      'Digital and print-ready files',
+    ],
+  },
+  {
+    num: '03',
+    title: 'Print & Editorial',
+    slug: 'print',
+    color: 'var(--forest)',
+    colorDark: 'var(--forest)',
+    desc: 'Posters, books, catalogues, and publications designed for the physical page. Typographic rigour and material awareness at every stage.',
+    includes: [
+      'Poster & exhibition design',
+      'Book & catalogue layout',
+      'Magazine & editorial design',
+      'Event & cultural print',
+      'Print-ready production files',
+    ],
+  },
+];
+---
+
+<BaseLayout title="Services" description="Graphic design services by Turcsik Bella — visual identity, illustration, and print design.">
+
+  <div class="page-wrap">
+
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="container ph-inner">
+        <div>
+          <span class="label">Services</span>
+          <h1 class="page-title">What I Do</h1>
+        </div>
+        <p class="page-desc">
+          I work with cultural institutions, independent businesses, and
+          individuals to create visual work that communicates with precision
+          and feeling.
+        </p>
+      </div>
+    </header>
+
+    <!-- Services -->
+    <section class="services-section">
+      <div class="container">
+        {services.map((svc) => (
+          <div class="service-block" id={svc.slug} style={`--svc-color:${svc.color};--svc-dark:${svc.colorDark};`}>
+            <div class="sb-left">
+              <div class="sb-num" aria-hidden="true">{svc.num}</div>
+              <div class="sb-geo" aria-hidden="true">
+                <div class="sbg-fill"></div>
+              </div>
+            </div>
+            <div class="sb-body">
+              <h2 class="sb-title">{svc.title}</h2>
+              <p class="sb-desc">{svc.desc}</p>
+              <ul class="sb-list">
+                {svc.includes.map((item) => (
+                  <li class="sb-item">
+                    <span class="sb-bullet" aria-hidden="true">—</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Process note -->
+    <section class="section process-note">
+      <div class="container pn-inner">
+        <div class="pn-text">
+          <span class="label" style="margin-bottom:1.5rem">Working Together</span>
+          <h2 class="pn-heading">Every project begins with a conversation.</h2>
+          <p>
+            I take on a limited number of projects at a time to ensure each one
+            receives full attention. If you have something in mind — a new brand,
+            a book, an image — I'd love to hear about it.
+          </p>
+          <a href={`${base}contact`} class="btn btn-primary" style="margin-top:2rem">Start a Project</a>
+        </div>
+        <div class="pn-visual" aria-hidden="true">
+          <div class="pnv-rect"></div>
+          <div class="pnv-circle"></div>
+          <div class="pnv-line"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</BaseLayout>
+
+<style>
+  .page-wrap { padding-top: var(--nav-height); }
+
+  /* ─── Page Header ──────────────────────────────────────── */
+  .page-header {
+    padding: 5rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ph-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+  }
+
+  .page-header .label { margin-bottom: 1rem; }
+
+  .page-title {
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .page-desc {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 44ch;
+    align-self: end;
+  }
+
+  /* ─── Service Blocks ───────────────────────────────────── */
+  .services-section { padding: 0 0 5rem; }
+
+  .service-block {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 4rem;
+    padding: 5rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .sb-left { position: relative; }
+
+  .sb-num {
+    font-family: var(--font-serif);
+    font-size: 4rem;
+    font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+  }
+
+  .sb-geo {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+
+  .sbg-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--svc-color);
+    opacity: 0.25;
+    border-radius: 50%;
+    transition: opacity 0.3s, transform 0.3s var(--ease);
+  }
+  .service-block:hover .sbg-fill { opacity: 0.4; transform: scale(1.08); }
+
+  .sb-body { padding-top: 1rem; }
+
+  .sb-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+
+  .sb-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--svc-dark);
+    margin-top: 1rem;
+  }
+
+  .sb-desc {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 300;
+    max-width: 55ch;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .sb-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .sb-item {
+    display: flex;
+    gap: 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .sb-bullet {
+    color: var(--svc-dark);
+    flex-shrink: 0;
+  }
+
+  /* ─── Process Note ─────────────────────────────────────── */
+  .process-note { background: var(--bg-alt); }
+
+  .pn-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .pn-heading {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .pn-text p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+    max-width: 45ch;
+    line-height: 1.7;
+  }
+
+  /* Geometric illustration */
+  .pn-visual {
+    position: relative;
+    aspect-ratio: 1;
+  }
+
+  .pnv-rect {
+    position: absolute;
+    inset-block-start: 10%;
+    inset-inline-end: 0;
+    width: 70%;
+    height: 70%;
+    background: var(--sky);
+    opacity: 0.25;
+  }
+
+  .pnv-circle {
+    position: absolute;
+    inset-block-end: 5%;
+    inset-inline-start: 5%;
+    width: 50%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1.5px solid var(--earth);
+  }
+
+  .pnv-line {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline: 0;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── Responsive ───────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .ph-inner      { grid-template-columns: 1fr; gap: 2rem; }
+    .service-block { grid-template-columns: 1fr; }
+    .sb-left       { display: flex; align-items: center; gap: 2rem; }
+    .sb-geo        { flex-shrink: 0; }
+    .pn-inner      { grid-template-columns: 1fr; }
+    .pn-visual     { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .service-block { padding: 3rem 0; gap: 2rem; }
+    .sb-num        { font-size: 3rem; }
+  }
+</style>
