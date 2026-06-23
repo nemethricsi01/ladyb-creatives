@@ -11,7 +11,7 @@ function isActive(segment: string) {
 <header class="header">
   <div class="header-inner">
     <a href={base} class="logo" aria-label="Ladyb Creatives — home">
-      <span class="logo-mark">LB</span>
+      <img src={`${base}logomark_ladyb.svg`} alt="" class="logo-img" aria-hidden="true" />
       <span class="logo-text">Ladyb Creatives</span>
     </a>
 
@@ -49,6 +49,7 @@ function isActive(segment: string) {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
+    overflow: visible;
   }
 
   .header-inner {
@@ -64,18 +65,16 @@ function isActive(segment: string) {
   /* Logo */
   .logo {
     display: flex;
-    align-items: baseline;
-    gap: 0.65rem;
+    align-items: center;
+    gap: 0.75rem;
     text-decoration: none;
   }
 
-  .logo-mark {
-    font-family: var(--font-serif);
-    font-size: 1.6rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--sky-dark);
-    line-height: 1;
+  .logo-img {
+    width: 100px;
+    height: 100px;
+    transform: rotate(45deg);
+    flex-shrink: 0;
   }
 
   .logo-text {
