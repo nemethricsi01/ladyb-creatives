@@ -3,30 +3,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const base = '/';
 
+const nameLine1 = 'BELLA'.split('');
+const nameLine2 = 'TURCSIK'.split('');
+const tileRotations = [-4, 3, -2, 4, -3, 2, -4];
+
+const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Budapest'];
+
 const featuredWork = [
   {
     title: 'Horizon Studio',
     category: 'Branding & Identity',
     year: '2024',
-    bg: '#7AAFCB',
-    shape1: '#F0EDE8',
-    shape2: '#2B4B3F',
+    palette: ['#7AAFCB', '#1C1C1C', '#E8B923', '#F7F5F0'],
   },
   {
     title: 'Reverie',
     category: 'Illustration',
     year: '2024',
-    bg: '#2B4B3F',
-    shape1: '#C4A882',
-    shape2: '#7AAFCB',
+    palette: ['#2B4B3F', '#C94030', '#F7F5F0', '#E8B923'],
   },
   {
     title: 'Almanach',
     category: 'Print & Editorial',
     year: '2023',
-    bg: '#C4A882',
-    shape1: '#1C1C1C',
-    shape2: '#C94030',
+    palette: ['#C4A882', '#1C1C1C', '#C94030', '#7AAFCB'],
   },
 ];
 ---
@@ -35,39 +35,53 @@ const featuredWork = [
 
   <!-- ── Hero ──────────────────────────────────────────────────────── -->
   <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <span class="label hero-label">Graphic Designer · Budapest</span>
-        <h1 class="hero-name">
-          <span class="name-top">Turcsik</span>
-          <span class="name-bottom">Bella</span>
-        </h1>
-        <p class="hero-tagline">
-          Visual identity, illustration, and print design rooted
-          in the language of form and colour.
-        </p>
-        <div class="hero-actions">
-          <a href={`${base}portfolio`} class="btn btn-primary">View Work</a>
-          <a href={`${base}about`} class="btn btn-ghost">About Me</a>
-        </div>
-      </div>
+    <div class="hero-overlay" aria-hidden="true"></div>
 
-      <div class="hero-visual" aria-hidden="true">
-        <div class="hv-rect"></div>
-        <div class="hv-circle"></div>
-        <div class="hv-bar"></div>
-        <div class="hv-dot"></div>
-      </div>
+    <div class="speech-bubble" aria-hidden="true">
+      <p>wdym <em>"just make it pop"</em>?</p>
     </div>
 
-    <div class="hero-scroll" aria-hidden="true">
-      <span class="label" style="writing-mode:vertical-rl;letter-spacing:0.2em;">Scroll</span>
-      <div class="scroll-line"></div>
+    <div class="hero-content">
+      <span class="label hero-label-pop">Graphic Designer <span aria-hidden="true">|</span> Illustrator</span>
+
+      <h1 class="ransom-name">
+        <span class="ransom-word">
+          {nameLine1.map((ch, i) => (
+            <span class="tile" style={`--r:${tileRotations[i % tileRotations.length]}deg`}>{ch}</span>
+          ))}
+        </span>
+        <span class="ransom-word">
+          {nameLine2.map((ch, i) => (
+            <span class="tile" style={`--r:${tileRotations[(i + 2) % tileRotations.length]}deg`}>
+              {ch}
+              {ch === 'C' && <span class="tile-copy" aria-hidden="true">©</span>}
+            </span>
+          ))}
+        </span>
+      </h1>
+
+      <p class="hero-tagline-pop">
+        I enjoy experimenting with different styles, techniques
+        and mediums to create work that fits the idea.
+      </p>
+
+      <div class="hero-actions-pop">
+        <a href={`${base}portfolio`} class="btn btn-pop-primary">Explore Projects →</a>
+        <a href={`${base}about`} class="btn btn-pop-ghost">About Me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Info Strip ────────────────────────────────────────────────── -->
+  <section class="hero-strip">
+    <div class="container strip-inner">
+      <span>Branding · Packaging · Print · Illustration</span>
+      <span>Based in Budapest · Available Worldwide</span>
     </div>
   </section>
 
   <!-- ── Selected Work ─────────────────────────────────────────────── -->
-  <section class="section section-work">
+  <section class="section section-work reveal">
     <div class="container">
       <div class="section-header">
         <span class="label">Selected Work</span>
@@ -76,14 +90,16 @@ const featuredWork = [
 
       <div class="featured-grid">
         {featuredWork.map((item) => (
-          <a
-            href={`${base}portfolio`}
-            class="feat-card"
-            style={`--card-bg:${item.bg};--card-s1:${item.shape1};--card-s2:${item.shape2};`}
-          >
+          <a href={`${base}portfolio`} class="feat-card">
             <div class="card-visual">
-              <div class="cv-shape cv-shape-1"></div>
-              <div class="cv-shape cv-shape-2"></div>
+              {item.palette.map((color, i) => (
+                <div
+                  class="cv-quad"
+                  style={`--quad-bg:${color};--quad-bg-alt:${item.palette[(i + 2) % item.palette.length]};--quad-fg:${item.palette[(i + 1) % item.palette.length]};`}
+                >
+                  <span class="cv-dot"></span>
+                </div>
+              ))}
             </div>
             <div class="card-meta">
               <span class="label card-cat">{item.category}</span>
@@ -96,8 +112,20 @@ const featuredWork = [
     </div>
   </section>
 
+  <!-- ── Marquee ───────────────────────────────────────────────────── -->
+  <section class="marquee reveal" aria-hidden="true">
+    <div class="marquee-track">
+      {Array(8).fill(marqueeWords).flat().map((word) => (
+        <>
+          <span class="marquee-word">{word}</span>
+          <span class="marquee-star">✦</span>
+        </>
+      ))}
+    </div>
+  </section>
+
   <!-- ── About Teaser ──────────────────────────────────────────────── -->
-  <section class="section section-about">
+  <section class="section section-about reveal">
     <div class="container about-split">
       <div class="about-visual" aria-hidden="true">
         <div class="av-frame">
@@ -115,8 +143,8 @@ const featuredWork = [
         <p>
           Turcsik Bella is a Budapest-based graphic designer working at the
           intersection of visual identity and conceptual illustration. Drawn to
-          the surreal clarity of Magritte and the disciplined beauty of the
-          Bauhaus, her work finds poetry in structure.
+          the surreal clarity of Magritte and the bold, repeatable pop of
+          Warhol, her work finds poetry in structure.
         </p>
         <a href={`${base}about`} class="btn btn-ghost" style="margin-top:2rem">Read More</a>
       </div>
@@ -124,7 +152,7 @@ const featuredWork = [
   </section>
 
   <!-- ── Services Teaser ───────────────────────────────────────────── -->
-  <section class="section section-services">
+  <section class="section section-services reveal">
     <div class="container">
       <div class="section-header">
         <span class="label">What I Do</span>
@@ -169,7 +197,7 @@ const featuredWork = [
   </section>
 
   <!-- ── Contact CTA ───────────────────────────────────────────────── -->
-  <section class="section section-cta">
+  <section class="section section-cta reveal">
     <div class="container">
       <div class="cta-inner">
         <span class="label">Let's Talk</span>
@@ -187,131 +215,225 @@ const featuredWork = [
 <style>
   /* ─── Hero ───────────────────────────────────────────────────────── */
   .hero {
-    min-height: 100vh;
-    padding-top: var(--nav-height);
-    display: flex;
-    flex-direction: column;
     position: relative;
     overflow: hidden;
-  }
-
-  .hero-inner {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    padding-top: var(--nav-height);
+    min-height: clamp(560px, 90vh, 820px);
+    display: flex;
     align-items: center;
+    background-image: url('/kep_01.png');
+    background-size: cover;
+    background-position: right center;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(15,13,12,0.62) 0%, rgba(15,13,12,0.25) 45%, transparent 68%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
     max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 4rem 2.5rem;
     width: 100%;
-    gap: 4rem;
+    margin: 0 auto;
+    padding: 0 2.5rem;
   }
 
-  .hero-label { margin-bottom: 1.5rem; }
-
-  .hero-name {
-    font-family: var(--font-serif);
-    font-weight: 300;
-    line-height: 0.9;
-    margin-bottom: 2rem;
+  .hero-label-pop {
+    color: var(--pop-yellow);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
   }
 
-  .name-top {
-    display: block;
-    font-size: clamp(4rem, 8vw, 7.5rem);
-    color: var(--text-muted);
-    letter-spacing: -0.02em;
+  .ransom-name {
+    margin: 0.75rem 0 1.75rem;
   }
 
-  .name-bottom {
-    display: block;
-    font-size: clamp(5rem, 10vw, 9.5rem);
-    color: var(--text);
-    letter-spacing: -0.03em;
-    margin-left: -0.04em;
+  .ransom-word {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
   }
 
-  .hero-tagline {
+  .tile {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cloud);
+    color: var(--bg-dark);
+    border: 2px solid var(--bg-dark);
+    font-family: var(--font-ransom);
+    font-weight: 400;
+    font-size: clamp(2.2rem, 6vw, 4.6rem);
+    line-height: 1;
+    padding: 0.12em 0.22em 0.06em;
+    transform: rotate(var(--r));
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+
+  .tile:hover {
+    transform: rotate(calc(var(--r) * -1.4)) translateY(-5px) scale(1.06);
+    box-shadow: 6px 7px 0 rgba(0,0,0,0.4);
+    z-index: 2;
+  }
+
+  .tile:has(.tile-copy) { z-index: 1; }
+
+  .tile-copy {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: -0.35em;
+    inset-inline-end: -0.35em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7em;
+    height: 1.7em;
+    border-radius: 50%;
+    background: var(--red);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 0.26em;
+    font-weight: 600;
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  }
+
+  .hero-tagline-pop {
     font-size: 1rem;
-    color: var(--text-muted);
-    max-width: 34ch;
+    color: var(--cloud);
+    max-width: 38ch;
     line-height: 1.65;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.25rem;
     font-weight: 300;
   }
 
-  .hero-actions {
+  .hero-actions-pop {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
   }
 
-  /* Hero geometric composition */
-  .hero-visual {
-    position: relative;
-    height: 60vh;
-    min-height: 420px;
-  }
-
-  .hv-rect {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-end: 0;
-    width: 78%;
-    height: 82%;
-    background: var(--sky);
-  }
-
-  .hv-circle {
-    position: absolute;
-    inset-block-end: 4%;
-    inset-inline-start: 0;
-    width: 42%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--earth);
-  }
-
-  .hv-bar {
-    position: absolute;
-    inset-block-end: 0;
-    inset-inline-start: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--forest);
-  }
-
-  .hv-dot {
-    position: absolute;
-    inset-block-start: 10%;
-    inset-inline-start: 12%;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+  .btn-pop-primary {
     background: var(--red);
+    border-color: var(--red);
+    border-radius: 999px;
+    color: #fff;
+  }
+  .btn-pop-primary:hover {
+    background: #A5311F;
+    border-color: #A5311F;
   }
 
-  /* Scroll indicator */
-  .hero-scroll {
+  .btn-pop-ghost {
+    background: transparent;
+    border-color: var(--cloud);
+    border-radius: 999px;
+    color: var(--cloud);
+  }
+  .btn-pop-ghost:hover {
+    background: var(--cloud);
+    color: var(--bg-dark);
+  }
+
+  /* Speech bubble */
+  .speech-bubble {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: 16%;
+    inset-inline-end: 6%;
+    max-width: 230px;
+    background: var(--cloud);
+    border-radius: 18px;
+    padding: 0.85rem 1.15rem;
+    transform: rotate(-3deg);
+    box-shadow: 3px 4px 0 rgba(0,0,0,0.4);
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    inset-block-end: -9px;
+    inset-inline-start: 30px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-block-start-color: var(--cloud);
+    border-block-end: 0;
+  }
+
+  .speech-bubble p {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--red);
+  }
+
+  /* ─── Info Strip ─────────────────────────────────────────────────── */
+  .hero-strip {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .strip-inner {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.1rem;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  /* ─── Marquee ────────────────────────────────────────────────────── */
+  .marquee {
+    overflow: hidden;
+    background: var(--bg-dark);
+    border-block: 3px solid var(--bg-dark);
+    padding-block: 1rem;
+  }
+
+  .marquee-track {
+    display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding-bottom: 2rem;
-    align-self: flex-end;
-    margin: 0 auto;
+    width: max-content;
+    animation: marquee-scroll 70s linear infinite;
   }
 
-  .scroll-line {
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(to bottom, var(--border), transparent);
-    animation: scrollPulse 2s ease-in-out infinite;
+  .marquee-word {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pop-yellow);
+    white-space: nowrap;
+    margin-inline-end: 1.5rem;
   }
 
-  @keyframes scrollPulse {
-    0%, 100% { opacity: 0.4; transform: scaleY(1); }
-    50%       { opacity: 1;   transform: scaleY(1.2); }
+  .marquee-star {
+    color: var(--red);
+    font-size: 1rem;
+    margin-inline-end: 1.5rem;
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
   }
 
   /* ─── Featured Work ──────────────────────────────────────────────── */
@@ -331,7 +453,12 @@ const featuredWork = [
   .card-visual {
     position: relative;
     aspect-ratio: 4 / 5;
-    background: var(--card-bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 3px;
+    background: var(--bg-dark);
+    border: 3px solid var(--bg-dark);
     overflow: hidden;
     margin-bottom: 1.25rem;
     transition: transform 0.4s var(--ease);
@@ -339,28 +466,38 @@ const featuredWork = [
 
   .feat-card:hover .card-visual { transform: translateY(-4px); }
 
-  .cv-shape {
-    position: absolute;
+  .cv-quad {
+    position: relative;
+    background: var(--quad-bg);
+    overflow: hidden;
     pointer-events: none;
   }
 
-  .cv-shape-1 {
-    inset-block-end: 0;
-    inset-inline-end: 0;
-    width: 55%;
-    height: 55%;
-    background: var(--card-s1);
-    opacity: 0.6;
+  .cv-quad::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--quad-bg-alt);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease);
   }
 
-  .cv-shape-2 {
-    inset-block-start: 20%;
-    inset-inline-start: 15%;
-    width: 35%;
+  .feat-card:hover .cv-quad::before { opacity: 1; }
+  .cv-quad:nth-child(2)::before { transition-delay: 0.06s; }
+  .cv-quad:nth-child(3)::before { transition-delay: 0.12s; }
+  .cv-quad:nth-child(4)::before { transition-delay: 0.18s; }
+
+  .cv-dot {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+    width: 46%;
     aspect-ratio: 1;
     border-radius: 50%;
-    background: var(--card-s2);
-    opacity: 0.8;
+    background: var(--quad-fg);
+    opacity: 0.85;
   }
 
   .card-meta { padding: 0 0.25rem; }
@@ -377,7 +514,7 @@ const featuredWork = [
     margin-bottom: 0.25rem;
     transition: color 0.2s;
   }
-  .feat-card:hover .card-title { color: var(--sky-dark); }
+  .feat-card:hover .card-title { color: var(--red); }
 
   .card-year {
     font-family: var(--font-sans);
@@ -403,6 +540,7 @@ const featuredWork = [
     position: relative;
     aspect-ratio: 3 / 4;
     background: var(--sky);
+    border: 3px solid var(--bg-dark);
     overflow: hidden;
   }
 
@@ -448,7 +586,7 @@ const featuredWork = [
 
   .about-heading em {
     font-style: italic;
-    color: var(--sky-dark);
+    color: var(--red);
   }
 
   .about-text p {
@@ -465,12 +603,12 @@ const featuredWork = [
     margin-bottom: 3rem;
   }
 
-  .svc-item { padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .svc-item { padding-top: 1.5rem; border-top: 3px solid var(--bg-dark); }
 
   .svc-icon {
     width: 48px;
     height: 48px;
-    color: var(--sky-dark);
+    color: var(--red);
     margin-bottom: 1.25rem;
   }
 
@@ -488,8 +626,8 @@ const featuredWork = [
   }
 
   /* ─── CTA ────────────────────────────────────────────────────────── */
-  .section-cta { background: var(--forest); color: var(--cloud); }
-  .section-cta .label { color: var(--sky-light); margin-bottom: 1rem; }
+  .section-cta { background: var(--bg-dark); color: var(--cloud); }
+  .section-cta .label { color: var(--pop-yellow); margin-bottom: 1rem; }
 
   .cta-inner {
     display: flex;
@@ -509,27 +647,27 @@ const featuredWork = [
     font-family: var(--font-serif);
     font-size: clamp(1.2rem, 2.5vw, 1.8rem);
     font-weight: 300;
-    color: var(--sky-light);
+    color: var(--pop-yellow);
     text-decoration: none;
     letter-spacing: 0.02em;
     transition: color 0.2s;
   }
-  .cta-email:hover { color: var(--earth); }
+  .cta-email:hover { color: var(--red); }
 
   .section-cta .btn-dark {
-    background: var(--sky-dark);
-    border-color: var(--sky-dark);
+    background: var(--red);
+    border-color: var(--red);
+    border-radius: 999px;
     color: #fff;
   }
   .section-cta .btn-dark:hover {
-    background: var(--earth-dark);
-    border-color: var(--earth-dark);
+    background: #A5311F;
+    border-color: #A5311F;
   }
 
   /* ─── Responsive ─────────────────────────────────────────────────── */
   @media (max-width: 960px) {
-    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-    .hero-visual { height: 40vw; min-height: 280px; }
+    .speech-bubble { display: none; }
     .featured-grid { grid-template-columns: 1fr; gap: 2rem; }
     .about-split { grid-template-columns: 1fr; }
     .av-frame { aspect-ratio: 16 / 9; }
@@ -537,7 +675,9 @@ const featuredWork = [
   }
 
   @media (max-width: 768px) {
-    .hero-inner { padding: 3rem 1.5rem; }
+    .hero-content { padding: 0 1.5rem; }
+    .tile { font-size: clamp(1.9rem, 10vw, 3rem); }
+    .strip-inner { flex-direction: column; align-items: flex-start; }
     .featured-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
   }
 </style>

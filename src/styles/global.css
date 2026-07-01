@@ -1,3 +1,12 @@
+/* ─── Fonts ──────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Ransom';
+  src: url('/Courtneyisdope_ransom-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ─── Design Tokens ─────────────────────────────────────────────────────── */
 :root {
   /* Palette — Magritte-surreal with Bauhaus structure */
@@ -17,10 +26,14 @@
   --text-light:  #9B958F;
   --border:      #D5CFC7;
 
+  /* Pop accents — Warhol layer on top of the Magritte-surreal base */
+  --pop-yellow:  #E8B923;
+
   /* Typography */
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans:  'Josefin Sans', 'Helvetica Neue', sans-serif;
-  --font-body:  'DM Sans', system-ui, sans-serif;
+  --font-serif:  'Cormorant Garamond', Georgia, serif;
+  --font-sans:   'Montserrat', 'Helvetica Neue', sans-serif;
+  --font-body:   'Montserrat', system-ui, sans-serif;
+  --font-ransom: 'Ransom', var(--font-sans);
 
   /* Layout */
   --nav-height: 80px;
@@ -142,7 +155,7 @@ em { font-style: italic; }
   color: var(--text-muted);
   transition: color 0.2s;
 }
-.link-arrow:hover { color: var(--sky-dark); }
+.link-arrow:hover { color: var(--red); }
 
 /* ─── Horizontal Rule ────────────────────────────────────────────────────── */
 .hr-bauhaus {
@@ -154,6 +167,24 @@ em { font-style: italic; }
 }
 .hr-bauhaus::before { content: ''; flex: 3; height: 3px; background: var(--sky); }
 .hr-bauhaus::after  { content: ''; flex: 1; height: 3px; background: var(--earth); }
+
+/* ─── Scroll Reveal ──────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
