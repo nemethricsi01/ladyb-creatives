@@ -9,7 +9,7 @@ const services = [
     title: 'Visual Identity',
     slug: 'identity',
     color: 'var(--sky)',
-    colorDark: 'var(--sky-dark)',
+    colorDark: 'var(--red)',
     desc: 'A complete brand system — not just a logo, but a visual language that works coherently across every context. From initial concept to final brand guidelines.',
     includes: [
       'Logo design & variations',
@@ -24,7 +24,7 @@ const services = [
     title: 'Illustration',
     slug: 'illustration',
     color: 'var(--earth)',
-    colorDark: 'var(--earth-dark)',
+    colorDark: 'var(--pop-yellow)',
     desc: 'Original illustration for editorial, publishing, advertising, and cultural projects. Images that hold a distinct point of view and reward close attention.',
     includes: [
       'Editorial illustration',
@@ -39,7 +39,7 @@ const services = [
     title: 'Print & Editorial',
     slug: 'print',
     color: 'var(--forest)',
-    colorDark: 'var(--forest)',
+    colorDark: 'var(--bg-dark)',
     desc: 'Posters, books, catalogues, and publications designed for the physical page. Typographic rigour and material awareness at every stage.',
     includes: [
       'Poster & exhibition design',
@@ -72,7 +72,7 @@ const services = [
     </header>
 
     <!-- Services -->
-    <section class="services-section">
+    <section class="services-section reveal">
       <div class="container">
         {services.map((svc) => (
           <div class="service-block" id={svc.slug} style={`--svc-color:${svc.color};--svc-dark:${svc.colorDark};`}>
@@ -100,7 +100,7 @@ const services = [
     </section>
 
     <!-- Process note -->
-    <section class="section process-note">
+    <section class="section process-note reveal">
       <div class="container pn-inner">
         <div class="pn-text">
           <span class="label" style="margin-bottom:1.5rem">Working Together</span>
@@ -186,6 +186,14 @@ const services = [
     position: relative;
     width: 120px;
     height: 120px;
+  }
+
+  .sb-geo::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 3px solid var(--bg-dark);
+    border-radius: 50%;
   }
 
   .sbg-fill {
@@ -287,6 +295,7 @@ const services = [
     height: 70%;
     background: var(--sky);
     opacity: 0.25;
+    border: 3px solid var(--bg-dark);
   }
 
   .pnv-circle {

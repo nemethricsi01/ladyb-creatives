@@ -116,13 +116,14 @@ em { font-style: italic; }
 }
 
 .btn-primary {
-  background: var(--sky-dark);
-  border-color: var(--sky-dark);
+  background: var(--red);
+  border-color: var(--red);
+  border-radius: 999px;
   color: #fff;
 }
 .btn-primary:hover {
-  background: var(--forest);
-  border-color: var(--forest);
+  background: #A5311F;
+  border-color: #A5311F;
 }
 
 .btn-ghost {
@@ -131,8 +132,8 @@ em { font-style: italic; }
   color: var(--text-muted);
 }
 .btn-ghost:hover {
-  border-color: var(--sky-dark);
-  color: var(--sky-dark);
+  border-color: var(--red);
+  color: var(--red);
 }
 
 .btn-dark {

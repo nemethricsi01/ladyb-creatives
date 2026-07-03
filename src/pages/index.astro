@@ -675,8 +675,40 @@ const featuredWork = [
   }
 
   @media (max-width: 768px) {
-    .hero-content { padding: 0 1.5rem; }
-    .tile { font-size: clamp(1.9rem, 10vw, 3rem); }
+    .hero-content {
+      padding: 0 1.25rem;
+      text-align: center;
+    }
+
+    .hero-label-pop {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+    }
+
+    .ransom-word {
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .tile {
+      font-size: clamp(1.3rem, 8.2vw, 2.4rem);
+      padding: 0.1em 0.16em 0.04em;
+      border-width: 1.5px;
+    }
+
+    .hero-tagline-pop {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin-bottom: 1.75rem;
+      max-width: 32ch;
+      margin-inline: auto;
+    }
+
+    .hero-actions-pop {
+      justify-content: center;
+    }
+
     .strip-inner { flex-direction: column; align-items: flex-start; }
     .featured-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
   }

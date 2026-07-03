@@ -80,7 +80,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <!-- Footer note -->
-    <div class="avail-banner">
+    <div class="avail-banner reveal">
       <div class="container ab-inner">
         <div class="ab-dot" aria-hidden="true"></div>
         <p>
@@ -121,7 +121,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     letter-spacing: -0.02em;
     margin-bottom: 1.75rem;
   }
-  .cs-title em { color: var(--sky-dark); }
+  .cs-title em { color: var(--red); }
 
   .cs-desc {
     color: var(--text-muted);
@@ -141,7 +141,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: clamp(1.1rem, 2vw, 1.5rem);
     font-weight: 400;
     text-decoration: none;
-    color: var(--sky-dark);
+    color: var(--red);
     letter-spacing: 0.01em;
     display: inline-block;
     position: relative;
@@ -156,14 +156,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     inset-inline-start: 0;
     width: 100%;
     height: 1px;
-    background: var(--sky-dark);
+    background: var(--red);
     transform: scaleX(0.3);
     transform-origin: left;
     transition: transform 0.3s var(--ease);
   }
 
-  .cs-email:hover { color: var(--forest); }
-  .cs-email:hover::after { transform: scaleX(1); background: var(--forest); }
+  .cs-email:hover { color: var(--bg-dark); }
+  .cs-email:hover::after { transform: scaleX(1); background: var(--bg-dark); }
 
   .cs-social .label { margin-bottom: 1rem; }
 
@@ -185,7 +185,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: var(--text-muted);
     transition: color 0.2s;
   }
-  .social-item:hover { color: var(--sky-dark); }
+  .social-item:hover { color: var(--red); }
 
   .social-item svg {
     width: 18px;
@@ -206,6 +206,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     width: 85%;
     height: 75%;
     background: linear-gradient(to bottom, #B8D8E8 0%, #7AAFCB 60%, #4A7D9A 100%);
+    border: 3px solid var(--bg-dark);
     overflow: hidden;
   }
 
@@ -255,7 +256,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .cv-dot-2 {
     width: 8px;
     height: 8px;
-    background: var(--forest);
+    background: var(--pop-yellow);
     inset-block-end: 20%;
     inset-inline-end: 5%;
   }

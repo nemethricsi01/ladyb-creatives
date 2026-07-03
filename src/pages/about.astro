@@ -54,7 +54,7 @@ const influences = [
     </section>
 
     <!-- Bio -->
-    <section class="section bio-section">
+    <section class="section bio-section reveal">
       <div class="container bio-inner">
         <div class="bio-aside">
           <div class="bio-geo" aria-hidden="true">
@@ -95,7 +95,7 @@ const influences = [
     </section>
 
     <!-- Influences -->
-    <section class="section influences-section">
+    <section class="section influences-section reveal">
       <div class="container">
         <div class="section-header">
           <span class="label">Influences</span>
@@ -116,7 +116,7 @@ const influences = [
     </section>
 
     <!-- Process -->
-    <section class="section process-section">
+    <section class="section process-section reveal">
       <div class="container">
         <span class="label" style="margin-bottom:3rem;display:block">How I Work</span>
         <div class="process-steps">
@@ -166,7 +166,7 @@ const influences = [
     letter-spacing: -0.02em;
     margin-bottom: 1.25rem;
   }
-  .ah-title em { color: var(--sky-dark); }
+  .ah-title em { color: var(--red); }
 
   .ah-role {
     font-family: var(--font-sans);
@@ -185,6 +185,7 @@ const influences = [
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: var(--sky-dark);
+    border: 3px solid var(--bg-dark);
   }
 
   .pf-sky {
@@ -226,7 +227,7 @@ const influences = [
     inset-inline-end: -1.5rem;
     width: 3rem;
     height: 60%;
-    background: var(--earth);
+    background: var(--pop-yellow);
     z-index: -1;
   }
 
@@ -320,7 +321,9 @@ const influences = [
     flex-shrink: 0;
     width: 3rem;
     letter-spacing: -0.02em;
+    transition: color 0.25s;
   }
+  .influence-card:hover .ic-number { color: var(--red); }
 
   .ic-name {
     font-size: 1.3rem;
@@ -355,9 +358,10 @@ const influences = [
     font-family: var(--font-serif);
     font-size: 2.5rem;
     font-weight: 300;
-    color: var(--sky);
+    color: var(--pop-yellow);
     line-height: 1;
     letter-spacing: -0.02em;
+    -webkit-text-stroke: 1px var(--bg-dark);
   }
 
   .ps-title {
