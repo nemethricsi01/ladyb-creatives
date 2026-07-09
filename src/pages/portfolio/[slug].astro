@@ -1,0 +1,371 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const base = '/';
+
+const currentIndex = projects.findIndex((p) => p.slug === project.slug);
+const next = projects[(currentIndex + 1) % projects.length];
+---
+
+<BaseLayout
+  title={project.title}
+  description={`${project.title} — ${project.services.join(', ')}. A project by Turcsik Bella.`}
+>
+
+  <div class="page-wrap">
+
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="container">
+        <a href={`${base}portfolio`} class="link-arrow back-link">← All Projects</a>
+        <span class="label">{project.services.join(' · ')}</span>
+        <h1 class="page-title">{project.title}</h1>
+      </div>
+    </header>
+
+    <!-- Gallery -->
+    <section class="gallery-section reveal">
+      <div class="container">
+        <div class="gallery-hero">
+          <img src={project.cover} alt={`${project.title} cover`} class="gallery-img" />
+        </div>
+
+        <div class="gallery-info">
+          {project.description.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+
+        {project.gallery.length > 0 && (
+          <div class="masonry" id="masonry">
+            {project.gallery.map((item, i) => (
+              <button type="button" class="masonry-item" data-index={i} aria-label={item.type === 'video' ? 'Play video' : 'View image'}>
+                {item.type === 'video' ? (
+                  <>
+                    <video src={`${item.src}#t=0.5`} muted playsinline preload="metadata"></video>
+                    <span class="play-badge" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><polygon points="7,4 20,12 7,20" fill="currentColor" /></svg>
+                    </span>
+                  </>
+                ) : (
+                  <img src={item.src} alt={`${project.title} detail`} loading="lazy" />
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {project.gallery.length > 0 && (
+        <div class="lightbox" id="lightbox" aria-hidden="true">
+          <button type="button" class="lb-close" id="lbClose" aria-label="Close">✕</button>
+          <button type="button" class="lb-prev" id="lbPrev" aria-label="Previous">←</button>
+          <button type="button" class="lb-next" id="lbNext" aria-label="Next">→</button>
+          <div class="lb-stage" id="lbStage"></div>
+        </div>
+      )}
+    </section>
+
+    <!-- Next Project -->
+    <section class="next-section reveal">
+      <div class="container">
+        <a href={`${base}portfolio/${next.slug}`} class="next-card">
+          <span class="label">Next Project</span>
+          <h2 class="next-title">{next.title} →</h2>
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+</BaseLayout>
+
+<script define:vars={{ gallery: project.gallery }}>
+  const masonry = document.getElementById('masonry');
+  const lightbox = document.getElementById('lightbox');
+  const stage = document.getElementById('lbStage');
+  const btnClose = document.getElementById('lbClose');
+  const btnPrev = document.getElementById('lbPrev');
+  const btnNext = document.getElementById('lbNext');
+
+  let currentIndex = 0;
+
+  function render(index) {
+    currentIndex = (index + gallery.length) % gallery.length;
+    const item = gallery[currentIndex];
+    stage.innerHTML = '';
+
+    const stageMediaStyle = 'max-width:100%;max-height:86vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.5);';
+
+    if (item.type === 'video') {
+      const video = document.createElement('video');
+      video.src = item.src;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      video.setAttribute('style', stageMediaStyle);
+      stage.appendChild(video);
+    } else {
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = '';
+      img.setAttribute('style', stageMediaStyle);
+      stage.appendChild(img);
+    }
+  }
+
+  function open(index) {
+    render(index);
+    lightbox?.classList.add('is-open');
+    lightbox?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox?.classList.remove('is-open');
+    lightbox?.setAttribute('aria-hidden', 'true');
+    stage.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  masonry?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.masonry-item');
+    if (!btn) return;
+    open(Number(btn.dataset.index));
+  });
+
+  btnClose?.addEventListener('click', close);
+  btnPrev?.addEventListener('click', () => render(currentIndex - 1));
+  btnNext?.addEventListener('click', () => render(currentIndex + 1));
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('is-open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') render(currentIndex - 1);
+    if (e.key === 'ArrowRight') render(currentIndex + 1);
+  });
+</script>
+
+<style>
+  .page-wrap { padding-top: var(--nav-height); }
+
+  /* ─── Page Header ──────────────────────────────────────────── */
+  .page-header {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+
+  .page-header .label { margin-bottom: 1rem; }
+
+  .page-title {
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── Gallery ──────────────────────────────────────────────── */
+  .gallery-section { padding: 4rem 0; }
+
+  .gallery-hero {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.2);
+    margin-bottom: 3rem;
+  }
+
+  .gallery-img {
+    width: 100%;
+    height: auto;
+  }
+
+  .gallery-info {
+    max-width: 60ch;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .gallery-info p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  /* ─── Masonry Gallery ────────────────────────────────────────── */
+  .masonry {
+    columns: 2;
+    column-gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .masonry-item {
+    position: relative;
+    display: block;
+    width: 100%;
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    border: none;
+    padding: 0;
+    background: var(--bg-dark);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    cursor: pointer;
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+
+  .masonry-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.22);
+  }
+
+  .masonry-item img,
+  .masonry-item video {
+    display: block;
+    width: 100%;
+    pointer-events: none;
+  }
+
+  .play-badge {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .play-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(28,28,28,0.18);
+    transition: background 0.25s var(--ease);
+  }
+
+  .masonry-item:hover .play-badge::before {
+    background: rgba(28,28,28,0.38);
+  }
+
+  .play-badge svg {
+    position: relative;
+    z-index: 1;
+    width: 3rem;
+    height: 3rem;
+    color: #fff;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+    transition: transform 0.25s var(--ease);
+  }
+
+  .masonry-item:hover .play-badge svg { transform: scale(1.1); }
+
+  @media (max-width: 640px) {
+    .masonry { columns: 1; }
+  }
+
+  /* ─── Lightbox ───────────────────────────────────────────────── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15,13,12,0.94);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease);
+  }
+
+  .lightbox.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lb-stage {
+    max-width: min(90vw, 1100px);
+    max-height: 86vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lb-close,
+  .lb-prev,
+  .lb-next {
+    position: fixed;
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 1rem;
+    opacity: 0.8;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .lb-close:hover,
+  .lb-prev:hover,
+  .lb-next:hover {
+    opacity: 1;
+    color: var(--red);
+  }
+
+  .lb-close { top: 0.75rem; right: 1rem; font-size: 1.5rem; }
+  .lb-prev { top: 50%; left: 0.5rem; transform: translateY(-50%); font-size: 2rem; }
+  .lb-next { top: 50%; right: 0.5rem; transform: translateY(-50%); font-size: 2rem; }
+
+  @media (max-width: 640px) {
+    .lb-prev, .lb-next { font-size: 1.5rem; padding: 0.6rem; }
+  }
+
+  /* ─── Next Project ───────────────────────────────────────────── */
+  .next-section {
+    padding: 4rem 0 7rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .next-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .next-card .label { color: var(--text-muted); }
+
+  .next-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+
+  .next-card:hover .next-title { color: var(--red); }
+
+  /* ─── Responsive ─────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .page-header { padding: 3rem 0 2rem; }
+    .gallery-section { padding: 2.5rem 0; }
+  }
+</style>
