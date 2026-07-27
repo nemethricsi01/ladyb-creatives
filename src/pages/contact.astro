@@ -31,7 +31,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div class="cs-social">
             <span class="label" style="margin-bottom:0.75rem">Find me on</span>
             <div class="social-links">
-              <a href="#" class="social-item" aria-label="Instagram">
+              <a href="https://www.instagram.com/ladyb_creatives/" target="_blank" rel="noopener noreferrer" class="social-item" aria-label="Instagram">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
                   <rect x="2" y="2" width="20" height="20" rx="5"/>
                   <circle cx="12" cy="12" r="4"/>
@@ -39,7 +39,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 </svg>
                 Instagram
               </a>
-              <a href="#" class="social-item" aria-label="Behance">
+              <a href="https://www.behance.net/bellaturcsik" target="_blank" rel="noopener noreferrer" class="social-item" aria-label="Behance">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
                   <path d="M2 7h7.5C11.4 7 13 8.6 13 10.5S11.4 14 9.5 14H2V7z"/>
                   <path d="M2 14h8.5C12.4 14 14 15.4 14 17.3S12.4 20 10.5 20H2v-6z"/>
@@ -48,7 +48,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 </svg>
                 Behance
               </a>
-              <a href="#" class="social-item" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/tbellaaa/" target="_blank" rel="noopener noreferrer" class="social-item" aria-label="LinkedIn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
                   <rect x="2" y="2" width="20" height="20" rx="3"/>
                   <line x1="7" y1="11" x2="7" y2="17"/>
@@ -63,17 +63,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- Right: Visual -->
-        <div class="cs-visual" aria-hidden="true">
-          <div class="cv-sky-rect">
-            <div class="cvs-cloud"></div>
-            <div class="cvs-line"></div>
-          </div>
-          <div class="cv-earth-circle"></div>
-          <div class="cv-dot cv-dot-1"></div>
-          <div class="cv-dot cv-dot-2"></div>
-          <div class="cv-label-geo">
-            <span class="label" style="color:rgba(255,255,255,0.5);">Budapest</span>
-          </div>
+        <div class="cs-visual">
+          <img
+            src="/christmas-breakfast-pawty.gif"
+            alt="Christmas breakfast animated illustration by Bella"
+            class="cs-visual-img"
+            loading="lazy"
+          />
         </div>
 
       </div>
@@ -107,7 +103,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 6rem;
-    align-items: center;
+    align-items: stretch;
     min-height: 70vh;
   }
 
@@ -193,78 +189,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     flex-shrink: 0;
   }
 
-  /* Right visual — Magritte sky with geometric Bauhaus shapes */
-  .cs-visual {
-    position: relative;
-    aspect-ratio: 1;
-  }
+  /* Right visual — fills the column so it aligns with the text block */
+  .cs-visual { position: relative; }
 
-  .cv-sky-rect {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-end: 0;
-    width: 85%;
-    height: 75%;
-    background: linear-gradient(to bottom, #B8D8E8 0%, #7AAFCB 60%, #4A7D9A 100%);
+  .cs-visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border: 3px solid var(--bg-dark);
-    overflow: hidden;
-  }
-
-  .cvs-cloud {
-    position: absolute;
-    inset-block-start: 25%;
-    inset-inline-start: 50%;
-    transform: translateX(-50%);
-    width: 55%;
-    height: 20%;
-    border-radius: 100px;
-    background: rgba(255,255,255,0.25);
-  }
-
-  .cvs-line {
-    position: absolute;
-    inset-block-end: 30%;
-    inset-inline: 0;
-    height: 1px;
-    background: rgba(255,255,255,0.2);
-  }
-
-  .cv-earth-circle {
-    position: absolute;
-    inset-block-end: 0;
-    inset-inline-start: 0;
-    width: 50%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--earth);
-    opacity: 0.9;
-  }
-
-  .cv-dot {
-    position: absolute;
-    border-radius: 50%;
-  }
-
-  .cv-dot-1 {
-    width: 12px;
-    height: 12px;
-    background: var(--red);
-    inset-block-start: 5%;
-    inset-inline-start: 5%;
-  }
-
-  .cv-dot-2 {
-    width: 8px;
-    height: 8px;
-    background: var(--pop-yellow);
-    inset-block-end: 20%;
-    inset-inline-end: 5%;
-  }
-
-  .cv-label-geo {
-    position: absolute;
-    inset-block-end: 1rem;
-    inset-inline-end: 1rem;
+    box-shadow: 6px 7px 0 rgba(0, 0, 0, 0.3);
   }
 
   /* ─── Availability Banner ──────────────────────────────── */
@@ -304,9 +237,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* ─── Responsive ───────────────────────────────────────── */
   @media (max-width: 960px) {
     .cs-inner { grid-template-columns: 1fr; gap: 4rem; }
-    .cs-visual { aspect-ratio: 4/3; }
-  }
-  @media (max-width: 560px) {
-    .cs-visual { display: none; }
+    .cs-visual-img { height: auto; }
   }
 </style>

@@ -1,0 +1,406 @@
+---
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import { playgroundItems as placeholders } from '../data/playground';
+
+// Any image dropped into src/assets/playground/ shows up in the cloud
+// automatically (sorted by filename; the filename becomes the alt text).
+// While that folder is empty, placeholder images from data/playground.ts
+// are shown instead.
+const globbed = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/playground/*.{png,jpg,jpeg,webp,gif,avif}',
+  { eager: true }
+);
+
+function nameFromPath(path: string): string {
+  const file = path.split('/').pop() ?? '';
+  const cleaned = file
+    .replace(/\.[^.]+$/, '')
+    .replace(/^\d+[-_ ]*/, '')
+    .replace(/[-_]+/g, ' ')
+    .trim();
+  return cleaned || 'Playground image';
+}
+
+// The originals can be huge (tens of MB) — decoding and animating them
+// tanks performance, so the cards get small webp thumbnails and the
+// lightbox a capped-width version. Originals are never shipped.
+const folderItems = await Promise.all(
+  Object.entries(globbed)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(async ([path, mod]) => {
+      const thumb = await getImage({ src: mod.default, width: 500, format: 'webp' });
+      const full = await getImage({ src: mod.default, width: 1600, format: 'webp' });
+      return {
+        src: thumb.src,
+        full: full.src,
+        alt: nameFromPath(path),
+        caption: undefined as string | undefined,
+      };
+    })
+);
+
+const playgroundItems =
+  folderItems.length > 0
+    ? folderItems
+    : placeholders.map((p) => ({ ...p, full: p.src }));
+
+// Scattered "cloud" positions — cycled if there are more images than seeds.
+// x/y: % position in the cloud · r: tilt · d: parallax depth (px, sign flips direction)
+// w: card width · a: crop aspect-ratio inside the polaroid frame
+const seeds = [
+  { x: 10, y: 26, r: -6, d: 28, w: 200, a: '3 / 4' },
+  { x: 29, y: 66, r: 4, d: -18, w: 235, a: '4 / 5' },
+  { x: 48, y: 22, r: -3, d: 40, w: 215, a: '1 / 1' },
+  { x: 70, y: 60, r: 5, d: -28, w: 245, a: '3 / 4' },
+  { x: 16, y: 81, r: 3, d: 20, w: 185, a: '4 / 5' },
+  { x: 62, y: 85, r: -5, d: 34, w: 205, a: '1 / 1' },
+  { x: 88, y: 28, r: 6, d: -24, w: 190, a: '3 / 4' },
+  { x: 87, y: 78, r: -4, d: 24, w: 175, a: '1 / 1' },
+  { x: 38, y: 44, r: 2, d: -34, w: 170, a: '1 / 1' },
+];
+---
+
+<section class="section section-playground reveal" id="playground">
+  <div class="container">
+    <div class="pg-header">
+      <span class="label">Creative Playground</span>
+      <h2 class="pg-heading">
+        Things that don't need<br />a <em>whole page</em>.
+      </h2>
+      <p class="pg-sub">Sketches, experiments &amp; one-offs — click one for a closer look.</p>
+    </div>
+  </div>
+
+  <div class="pg-cloud" id="pgCloud">
+    {playgroundItems.map((item, i) => {
+      const s = seeds[i % seeds.length];
+      return (
+        <button
+          type="button"
+          class="pg-item"
+          style={`--x:${s.x}%; --y:${s.y}%; --r:${s.r}deg; --w:${s.w}px; --a:${s.a}; --fd:${(i * 0.9).toFixed(1)}s`}
+          data-depth={s.d}
+          data-index={i}
+          data-caption={item.caption}
+          data-full={item.full}
+          aria-label={`View image: ${item.alt}`}
+        >
+          <span class="pg-float">
+            <img src={item.src} alt={item.alt} loading="lazy" decoding="async" />
+          </span>
+        </button>
+      );
+    })}
+  </div>
+
+  <div class="pg-lightbox" id="pgLightbox" aria-hidden="true">
+    <button type="button" class="pg-lb-close" id="pgLbClose" aria-label="Close">✕</button>
+    <button type="button" class="pg-lb-prev" id="pgLbPrev" aria-label="Previous">←</button>
+    <button type="button" class="pg-lb-next" id="pgLbNext" aria-label="Next">→</button>
+    <figure class="pg-lb-stage" id="pgLbStage"></figure>
+  </div>
+</section>
+
+<script>
+  const cloud = document.getElementById('pgCloud');
+  const items = Array.from(document.querySelectorAll<HTMLButtonElement>('.pg-item'));
+
+  /* ── Cursor parallax (desktop, fine pointers, motion allowed) ── */
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (cloud && finePointer.matches && !reducedMotion.matches) {
+    let targetX = 0;
+    let targetY = 0;
+    let curX = 0;
+    let curY = 0;
+    let rafId = 0;
+
+    const depths = items.map((el) => Number(el.dataset.depth) || 0);
+
+    function tick() {
+      curX += (targetX - curX) * 0.06;
+      curY += (targetY - curY) * 0.06;
+
+      items.forEach((el, i) => {
+        el.style.setProperty('--px', `${(curX * depths[i]).toFixed(2)}px`);
+        el.style.setProperty('--py', `${(curY * depths[i]).toFixed(2)}px`);
+      });
+
+      if (Math.abs(targetX - curX) < 0.001 && Math.abs(targetY - curY) < 0.001) {
+        rafId = 0;
+      } else {
+        rafId = requestAnimationFrame(tick);
+      }
+    }
+
+    function wake() {
+      if (!rafId) rafId = requestAnimationFrame(tick);
+    }
+
+    cloud.addEventListener('pointermove', (e) => {
+      const rect = cloud.getBoundingClientRect();
+      targetX = (e.clientX - rect.left) / rect.width - 0.5;
+      targetY = (e.clientY - rect.top) / rect.height - 0.5;
+      wake();
+    });
+
+    cloud.addEventListener('pointerleave', () => {
+      targetX = 0;
+      targetY = 0;
+      wake();
+    });
+  }
+
+  /* ── Lightbox ── */
+  const lightbox = document.getElementById('pgLightbox');
+  const stage = document.getElementById('pgLbStage');
+  const btnClose = document.getElementById('pgLbClose');
+  const btnPrev = document.getElementById('pgLbPrev');
+  const btnNext = document.getElementById('pgLbNext');
+
+  let currentIndex = 0;
+
+  function render(index: number) {
+    if (!stage) return;
+    currentIndex = (index + items.length) % items.length;
+    const source = items[currentIndex].querySelector('img');
+    if (!source) return;
+
+    stage.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = items[currentIndex].dataset.full || source.src;
+    img.alt = source.alt;
+    stage.appendChild(img);
+
+    const caption = items[currentIndex].dataset.caption;
+    if (caption) {
+      const figcaption = document.createElement('figcaption');
+      figcaption.textContent = caption;
+      stage.appendChild(figcaption);
+    }
+  }
+
+  function open(index: number) {
+    render(index);
+    lightbox?.classList.add('is-open');
+    lightbox?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox?.classList.remove('is-open');
+    lightbox?.setAttribute('aria-hidden', 'true');
+    if (stage) stage.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  items.forEach((el) => {
+    el.addEventListener('click', () => open(Number(el.dataset.index)));
+  });
+
+  btnClose?.addEventListener('click', close);
+  btnPrev?.addEventListener('click', () => render(currentIndex - 1));
+  btnNext?.addEventListener('click', () => render(currentIndex + 1));
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('is-open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') render(currentIndex - 1);
+    if (e.key === 'ArrowRight') render(currentIndex + 1);
+  });
+</script>
+
+<style>
+  .section-playground {
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .pg-header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .pg-header .label { margin-bottom: 1.25rem; }
+
+  .pg-heading {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--text);
+  }
+
+  .pg-heading em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .pg-sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+  }
+
+  /* ── The cloud ── */
+  .pg-cloud {
+    position: relative;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    min-height: 680px;
+  }
+
+  .pg-item {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: min(var(--w), 20vw);
+    transform: translate(
+      calc(-50% + var(--px, 0px)),
+      calc(-50% + var(--py, 0px))
+    );
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    will-change: transform;
+  }
+
+  .pg-item:hover,
+  .pg-item:focus-visible {
+    z-index: 10;
+  }
+
+  /* Polaroid frame — rotation, idle float, and hover live here so they
+     don't fight the parallax transform on the outer button. */
+  .pg-float {
+    display: block;
+    background: var(--cloud);
+    border: 2px solid var(--bg-dark);
+    padding: 8px 8px 24px;
+    box-shadow: 4px 5px 0 rgba(0, 0, 0, 0.3);
+    rotate: var(--r);
+    will-change: translate;
+    animation: pg-float 7s ease-in-out infinite;
+    animation-delay: calc(var(--fd) * -1);
+    transition: rotate 0.35s var(--ease), scale 0.35s var(--ease),
+      box-shadow 0.35s var(--ease);
+  }
+
+  .pg-item:hover .pg-float,
+  .pg-item:focus-visible .pg-float {
+    rotate: 0deg;
+    scale: 1.08;
+    box-shadow: 7px 9px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .pg-float img {
+    width: 100%;
+    aspect-ratio: var(--a);
+    object-fit: cover;
+  }
+
+  @keyframes pg-float {
+    0%, 100% { translate: 0 -6px; }
+    50%      { translate: 0 6px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pg-float { animation: none; }
+  }
+
+  /* ── Lightbox ── */
+  .pg-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 13, 12, 0.94);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease);
+  }
+
+  .pg-lightbox.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .pg-lb-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: min(90vw, 1100px);
+  }
+
+  .pg-lb-stage :global(img) {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .pg-lb-stage :global(figcaption) {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--cloud);
+  }
+
+  .pg-lb-close,
+  .pg-lb-prev,
+  .pg-lb-next {
+    position: fixed;
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 1rem;
+    opacity: 0.8;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .pg-lb-close:hover,
+  .pg-lb-prev:hover,
+  .pg-lb-next:hover {
+    opacity: 1;
+    color: var(--red);
+  }
+
+  .pg-lb-close { top: 0.75rem; right: 1rem; font-size: 1.5rem; }
+  .pg-lb-prev { top: 50%; left: 0.5rem; transform: translateY(-50%); font-size: 2rem; }
+  .pg-lb-next { top: 50%; right: 0.5rem; transform: translateY(-50%); font-size: 2rem; }
+
+  /* ── Mobile: cloud becomes a scattered collage grid ── */
+  @media (max-width: 768px) {
+    .pg-cloud {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem 1.25rem;
+      min-height: 0;
+      padding: 2.5rem 1.5rem 0;
+    }
+
+    .pg-item {
+      position: static;
+      width: 100%;
+      transform: none;
+    }
+
+    /* Alternate a gentle offset so the grid still feels hand-placed */
+    .pg-item:nth-child(even) { margin-top: 1.5rem; }
+
+    .pg-lb-prev, .pg-lb-next { font-size: 1.5rem; padding: 0.6rem; }
+  }
+</style>

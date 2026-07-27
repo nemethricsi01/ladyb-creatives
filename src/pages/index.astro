@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Playground from '../components/Playground.astro';
 import { projects } from '../data/projects';
 
 const base = '/';
@@ -104,32 +105,8 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
     </div>
   </section>
 
-  <!-- ── About Teaser ──────────────────────────────────────────────── -->
-  <section class="section section-about reveal">
-    <div class="container about-split">
-      <div class="about-visual" aria-hidden="true">
-        <div class="av-frame">
-          <div class="av-sky"></div>
-          <div class="av-circle"></div>
-          <div class="av-line"></div>
-        </div>
-      </div>
-
-      <div class="about-text">
-        <span class="label">About</span>
-        <h2 class="about-heading">
-          Design is a <em>conversation</em><br />between form,<br />colour, and meaning.
-        </h2>
-        <p>
-          Turcsik Bella is a Budapest-based graphic designer working at the
-          intersection of visual identity and conceptual illustration. Drawn to
-          the surreal clarity of Magritte and the bold, repeatable pop of
-          Warhol, her work finds poetry in structure.
-        </p>
-        <a href={`${base}about`} class="btn btn-ghost" style="margin-top:2rem">Read More</a>
-      </div>
-    </div>
-  </section>
+  <!-- ── Creative Playground ───────────────────────────────────────── -->
+  <Playground />
 
   <!-- ── Services Teaser ───────────────────────────────────────────── -->
   <section class="section section-services reveal">
@@ -546,78 +523,6 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
 
   .latest-btn { pointer-events: none; }
 
-  /* ─── About Teaser ───────────────────────────────────────────────── */
-  .section-about { background: var(--bg-alt); }
-
-  .about-split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-
-  /* Magritte-inspired frame within a frame */
-  .about-visual { position: relative; }
-
-  .av-frame {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    background: var(--sky);
-    border: 3px solid var(--bg-dark);
-    overflow: hidden;
-  }
-
-  .av-sky {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      var(--sky-light) 0%,
-      var(--sky) 50%,
-      var(--sky-dark) 100%
-    );
-  }
-
-  .av-circle {
-    position: absolute;
-    inset-block-end: -10%;
-    inset-inline-start: 50%;
-    transform: translateX(-50%);
-    width: 70%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--earth);
-  }
-
-  .av-line {
-    position: absolute;
-    inset-block-start: 38%;
-    inset-inline: 0;
-    height: 1px;
-    background: rgba(255,255,255,0.35);
-  }
-
-  .about-text .label { margin-bottom: 1.5rem; }
-
-  .about-heading {
-    font-size: clamp(2rem, 3.5vw, 2.8rem);
-    font-weight: 300;
-    line-height: 1.15;
-    margin-bottom: 1.5rem;
-    color: var(--text);
-  }
-
-  .about-heading em {
-    font-style: italic;
-    color: var(--red);
-  }
-
-  .about-text p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    max-width: 42ch;
-  }
-
   /* ─── Services ───────────────────────────────────────────────────── */
   .services-row {
     display: grid;
@@ -692,8 +597,6 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
   @media (max-width: 960px) {
     .speech-bubble { display: none; }
     .latest-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .about-split { grid-template-columns: 1fr; }
-    .av-frame { aspect-ratio: 16 / 9; }
     .services-row { grid-template-columns: 1fr; gap: 2rem; }
   }
 
@@ -845,8 +748,7 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
     letter-spacing: 0.3em !important;
   }
 
-  :global(html.pop-mode .latest-img-wrap),
-  :global(html.pop-mode .av-frame) {
+  :global(html.pop-mode .latest-img-wrap) {
     border-radius: 0 !important;
     border: 6px solid #1c1c1c !important;
     transform: rotate(-2deg) !important;
@@ -858,7 +760,6 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
   }
 
   :global(html.pop-mode .hero-strip) { background: #fff92f !important; }
-  :global(html.pop-mode .section-about) { background: #2fe6ff !important; }
   :global(html.pop-mode .section-services) { background: #ff2fb0 !important; }
   :global(html.pop-mode .section-cta) { background: #2fff6e !important; }
 
