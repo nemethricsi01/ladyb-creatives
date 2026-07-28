@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { projects } from '../data/projects';
 
@@ -25,7 +26,7 @@ const base = '/';
           {projects.map((p) => (
             <a href={`${base}portfolio/${p.slug}`} class="project-card">
               <div class="card-img">
-                <img src={p.cover} alt={`${p.title} cover`} loading="lazy" />
+                <Image src={p.cover} alt={`${p.title} cover`} loading="lazy" width={600} />
                 <div class="card-overlay">
                   <span class="overlay-services">{p.services.join(' · ')}</span>
                   <span class="overlay-title">{p.title}</span>

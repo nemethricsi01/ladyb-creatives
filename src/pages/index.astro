@@ -1,9 +1,13 @@
 ---
+import { getImage, Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Playground from '../components/Playground.astro';
 import { projects } from '../data/projects';
+import heroSrc from '../assets/hero/kep_01.png';
 
 const base = '/';
+
+const heroImg = await getImage({ src: heroSrc, width: 1800, format: 'webp' });
 
 const nameLine1 = 'BELLA'.split('');
 const nameLine2 = 'TURCSIK'.split('');
@@ -15,7 +19,7 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
 <BaseLayout title="Home">
 
   <!-- ── Hero ──────────────────────────────────────────────────────── -->
-  <section class="hero">
+  <section class="hero" style={`--hero-bg:url(${heroImg.src})`}>
     <div class="hero-overlay" aria-hidden="true"></div>
 
     <button type="button" id="pop-trigger" class="speech-bubble" aria-pressed="false" aria-label={'Toggle "pop" mode'}>
@@ -68,7 +72,7 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
         <div>
           <h2 class="latest-title">
             Latest Projects
-            <img src={`${base}logomark_ladyb2.svg`} alt="" class="latest-bee" aria-hidden="true" />
+            <img src={`${base}brand/logomark_ladyb2.svg`} alt="" class="latest-bee" aria-hidden="true" />
           </h2>
           <p class="latest-sub">A selection of recent projects</p>
         </div>
@@ -79,7 +83,7 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
         {projects.map((p) => (
           <a href={`${base}portfolio/${p.slug}`} class="latest-card">
             <div class="latest-img-wrap">
-              <img src={p.cover} alt={`${p.title} cover`} class="latest-img" loading="lazy" />
+              <Image src={p.cover} alt={`${p.title} cover`} class="latest-img" loading="lazy" width={600} />
             </div>
             <div class="latest-meta">
               <span class="label latest-services">{p.services.join(' · ')}</span>
@@ -209,7 +213,7 @@ const marqueeWords = ['Pop Art', 'Graphic Design', 'Illustration', 'Print', 'Bud
     min-height: clamp(560px, 90vh, 820px);
     display: flex;
     align-items: center;
-    background-image: url('/kep_01.png');
+    background-image: var(--hero-bg);
     background-size: cover;
     background-position: right center;
   }

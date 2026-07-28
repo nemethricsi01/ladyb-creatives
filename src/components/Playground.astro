@@ -1,12 +1,9 @@
 ---
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
-import { playgroundItems as placeholders } from '../data/playground';
 
 // Any image dropped into src/assets/playground/ shows up in the cloud
 // automatically (sorted by filename; the filename becomes the alt text).
-// While that folder is empty, placeholder images from data/playground.ts
-// are shown instead.
 const globbed = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/playground/*.{png,jpg,jpeg,webp,gif,avif}',
   { eager: true }
@@ -25,7 +22,7 @@ function nameFromPath(path: string): string {
 // The originals can be huge (tens of MB) — decoding and animating them
 // tanks performance, so the cards get small webp thumbnails and the
 // lightbox a capped-width version. Originals are never shipped.
-const folderItems = await Promise.all(
+const playgroundItems = await Promise.all(
   Object.entries(globbed)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(async ([path, mod]) => {
@@ -39,11 +36,6 @@ const folderItems = await Promise.all(
       };
     })
 );
-
-const playgroundItems =
-  folderItems.length > 0
-    ? folderItems
-    : placeholders.map((p) => ({ ...p, full: p.src }));
 
 // Scattered "cloud" positions — cycled if there are more images than seeds.
 // x/y: % position in the cloud · r: tilt · d: parallax depth (px, sign flips direction)
